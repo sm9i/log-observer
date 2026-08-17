@@ -1,13 +1,15 @@
-import { CheckCircle2, CircleAlert, Link2, LoaderCircle, PlugZap, Unplug } from 'lucide-react'
+import { CheckCircle2, CircleAlert, KeyRound, Link2, LoaderCircle, PlugZap, Unplug } from 'lucide-react'
 import type { ConnectionStatus } from '../types/log'
 
 type ConnectionPanelProps = {
   address: string
   connectedPort: number | null
   isActive: boolean
+  socketKey: string
   onAddressChange: (value: string) => void
   onConnect: () => void
   onDisconnect: () => void
+  onKeyChange: (value: string) => void
   status: ConnectionStatus
   statusMessage: string
 }
@@ -16,9 +18,11 @@ export function ConnectionPanel({
   address,
   connectedPort,
   isActive,
+  socketKey,
   onAddressChange,
   onConnect,
   onDisconnect,
+  onKeyChange,
   status,
   statusMessage,
 }: ConnectionPanelProps) {
@@ -61,6 +65,22 @@ export function ConnectionPanel({
             aria-label="自动探测端口"
             disabled
           />
+        </label>
+        <label className="field key-field">
+          <span>Key</span>
+          <div className="input-with-icon">
+            <KeyRound size={17} aria-hidden="true" />
+            <input
+              value={socketKey}
+              onChange={(event) => onKeyChange(event.target.value)}
+              onKeyDown={(event) => handleKeyDown(event.key)}
+              placeholder="请输入 Key"
+              spellCheck="false"
+              autoComplete="off"
+              aria-label="Socket Key"
+              disabled={isActive}
+            />
+          </div>
         </label>
         <button className="connect-button" type="button" onClick={isActive ? onDisconnect : onConnect}>
           {isActive ? <Unplug size={17} /> : <PlugZap size={17} />}

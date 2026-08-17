@@ -12,9 +12,11 @@ export function LogObserverPage() {
           address={socketLogs.address}
           connectedPort={socketLogs.connectedPort}
           isActive={socketLogs.isActive}
+          socketKey={socketLogs.key}
           onAddressChange={socketLogs.setAddress}
           onConnect={socketLogs.connect}
           onDisconnect={socketLogs.disconnect}
+          onKeyChange={socketLogs.setKey}
           status={socketLogs.status}
           statusMessage={socketLogs.statusMessage}
         />

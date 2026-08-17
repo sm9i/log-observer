@@ -1,4 +1,4 @@
-export function buildSocketUrl(address: string, port: string): string {
+export function buildSocketUrl(address: string, port: string, key = ''): string {
   const rawAddress = address.trim()
   if (!rawAddress) throw new Error('请输入 Socket 地址')
 
@@ -20,6 +20,9 @@ export function buildSocketUrl(address: string, port: string): string {
     }
     url.port = port.trim()
   }
+
+  // Keep the key in the query string so the Socket server can authenticate it.
+  if (key.trim()) url.searchParams.set('key', key.trim())
 
   return url.toString()
 }

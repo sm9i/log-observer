@@ -20,6 +20,7 @@ export function useSocketLogs() {
   const logIdRef = useRef(0)
   const probeIdRef = useRef(0)
   const [address, setAddress] = useState('')
+  const [key, setKey] = useState('')
   const [connectedPort, setConnectedPort] = useState<number | null>(null)
   const [status, setStatus] = useState<ConnectionStatus>('idle')
   const [statusMessage, setStatusMessage] = useState(statusContent.idle.detail)
@@ -79,7 +80,7 @@ export function useSocketLogs() {
       const port = SOCKET_PORTS[portIndex]
       let url: string
       try {
-        url = buildSocketUrl(address, String(port))
+        url = buildSocketUrl(address, String(port), key)
       } catch (error) {
         setStatus('error')
         setStatusMessage(error instanceof Error ? error.message : '地址格式不正确')
@@ -100,7 +101,7 @@ export function useSocketLogs() {
           hasConnected = true
           setConnectedPort(port)
           setStatus('connected')
-          setStatusMessage(`已连接 ${url}`)
+          setStatusMessage(`已连接 ${address}:${port}`)
         }
 
         socket.onmessage = (event) => {
@@ -135,7 +136,7 @@ export function useSocketLogs() {
     }
 
     tryPort(0)
-  }, [address, appendLog, disconnect])
+  }, [address, appendLog, disconnect, key])
 
   // A route change or app unmount must not leave an active socket behind.
   useEffect(() => () => disconnect(false), [disconnect])
@@ -146,8 +147,10 @@ export function useSocketLogs() {
     disconnect,
     isActive: status === 'connected' || status === 'connecting',
     connectedPort,
+    key,
     logs,
     setAddress,
+    setKey,
     setLogs,
     status,
     statusMessage,
